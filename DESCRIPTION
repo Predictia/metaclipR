@@ -1,0 +1,36 @@
+Package: metaclipR
+Depends:
+    R(>= 3.1.0)
+Imports:
+    igraph,
+    Rgraphviz,
+    magrittr,
+    utils,
+    transformeR,
+    png
+Extends:
+    easyVerification,
+    climate4R.climdex,
+    loadeR,
+    visualizeR
+Suggests: 
+    knitr,
+    rmarkdown,
+    devtools
+Type: Package
+Title: A climate4R extension for METACLIP provenance description
+Version: 0.1-1
+Date: 2018-04-27
+Authors@R: as.person(c(
+    "Predictia [cph]",
+    "Joaquin Bedia <bediaj@predictia.es> [aut, cre]",
+    "Daniel San Martin <daniel@predictia.es> [aut]",
+    "Nicolau Manubens <nicolau.manubens@bsc.es> [ctb]"))
+BugReports: https://earth.bsc.es/gitlab/external/QA4Seas/issues
+URL: http://metaclip.predictia.es/
+Encoding: UTF-8
+Description: Encode climate product provenance according to the Metaclip Metadata Model <http://metaclip.predictia.es/>. 
+License: file LICENSE
+LazyData: true
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr
