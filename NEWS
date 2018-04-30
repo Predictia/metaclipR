@@ -1,4 +1,7 @@
 # NEWS
 
 * Added ETCCDI ClimateIndex definition
+* New `metaclipR.Ensemble` for multimodel ensemble representations
+* New `metaclipR.Validation`, for characterizing validation steps
+* Allow multi-layer plot representation in `metaclipR.spatialPlot` when multiple members exist
 * Other changes and class/property renaming for full compatibility with [datasource.owl v0.3](http://metaclip.predictia.es/datasource/0.3/datasource.owl)

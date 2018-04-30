@@ -97,6 +97,7 @@ Other transformation: \code{\link{metaclip.graph.Command}},
   \code{\link{metaclipR.AnomalyCalculation}},
   \code{\link{metaclipR.Climatology}},
   \code{\link{metaclipR.Dataset}},
+  \code{\link{metaclipR.Ensemble}},
   \code{\link{metaclipR.Regridding}},
   \code{\link{metaclipR.etccdi}}
 }

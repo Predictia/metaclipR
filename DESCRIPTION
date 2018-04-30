@@ -20,11 +20,11 @@ Suggests:
 Type: Package
 Title: A climate4R extension for METACLIP provenance description
 Version: 0.1-1
-Date: 2018-04-27
+Date: 2018-04-30
 Authors@R: as.person(c(
     "Predictia [cph]",
-    "Joaquin Bedia <bediaj@predictia.es> [aut, cre]",
-    "Daniel San Martin <daniel@predictia.es> [aut]",
+    "Joaquín Bedia <bediaj@predictia.es> [aut, cre]",
+    "Daniel San Martín <daniel@predictia.es> [aut]",
     "Nicolau Manubens <nicolau.manubens@bsc.es> [ctb]"))
 BugReports: https://earth.bsc.es/gitlab/external/QA4Seas/issues
 URL: http://metaclip.predictia.es/
