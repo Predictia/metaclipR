@@ -111,21 +111,24 @@ metaclipR.SpatialPlot <- function(package = "visualizeR",
                            label = "go:hasMapExtent")
     }
     # Layer definition
-    maplayer.nodename <- paste("mapLayer", randomName(), sep = ".")
+    n.mem <- ifelse(is.null(input.grid), 1, getShape(input.grid, "member"))
     classname <- ifelse(type == "grid", "go:MapRaster", "go:MapPoints")
-    graph <- add_vertices(graph,
-                          nv = 1,
-                          name = maplayer.nodename,
-                          label = "MapLayer",
-                          className = classname)
-    graph <- add_edges(graph,
-                       c(getNodeIndexbyName(graph, withInput),
-                         getNodeIndexbyName(graph, maplayer.nodename)),
-                       label = "go:hadGraphicalRepresentation")
-    graph <- add_edges(graph,
-                       c(getNodeIndexbyName(graph, map.nodename),
-                         getNodeIndexbyName(graph, maplayer.nodename)),
-                       label = "go:hasMapLayer")
+    for (i in 1:n.mem) {
+        maplayer.nodename <- paste("mapLayer", randomName(), i, sep = ".")
+        graph <- add_vertices(graph,
+                              nv = 1,
+                              name = maplayer.nodename,
+                              label = "MapLayer",
+                              className = classname)
+        graph <- add_edges(graph,
+                           c(getNodeIndexbyName(graph, withInput),
+                             getNodeIndexbyName(graph, maplayer.nodename)),
+                           label = "go:hadGraphicalRepresentation")
+        graph <- add_edges(graph,
+                           c(getNodeIndexbyName(graph, map.nodename),
+                             getNodeIndexbyName(graph, maplayer.nodename)),
+                           label = "go:hasMapLayer")
+    }
     # Additional layers
     if (!is.null(arg.list$backdrop.theme)) {
         descr <- switch(arg.list$backdrop.theme,
