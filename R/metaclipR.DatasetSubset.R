@@ -102,7 +102,7 @@ metaclipR.DatasetSubset <- function(package = "transformeR",
         }
         emptygraph <- FALSE
     }
-    output <- get(output)
+    if (is.character(output)) output <- get(output)
     output.shape <- getShape(output)
     output$Data <- NULL
     # dataset <- attr(output, "dataset")
