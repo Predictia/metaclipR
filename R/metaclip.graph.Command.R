@@ -64,54 +64,56 @@ metaclip.graph.Command <- function(graph, package, version, fun, arg.list, origi
                            label = "ds:fromPackage")
         # Argument and ArgumentValue
         arg.names <- names(arg.list)
-        for (i in 1:length(arg.list)) {
-            arg.node.name <- paste("Argument", arg.names[i], randomName(), sep = ".")
-            graph <- add_vertices(graph, 1,
-                                  name = arg.node.name, 
-                                  className = "ds:Argument",
-                                  label = arg.names[i],
-                                  attr = list("prov:value" = arg.names[i]))
-            graph <- add_edges(graph, 
-                               c(getNodeIndexbyName(graph, cmd.node.name),
-                                 getNodeIndexbyName(graph, arg.node.name)),
-                               label = "ds:usedArgument")
-            if (length(arg.list[[i]]) > 0) {
-                for (j in 1:length(arg.list[[i]])) {
-                    argval.node.name <- paste0("ArgumentValue.", arg.names[i], ".", j, ".", randomName())
-                    arg.val <- if (is.list(arg.list[[i]])) {
-                        arg.list[[i]][[j]]
-                    } else {
-                        arg.list[[i]][j]
+        if (!is.null(arg.names)) {
+            for (i in 1:length(arg.list)) {
+                arg.node.name <- paste("Argument", arg.names[i], randomName(), sep = ".")
+                graph <- add_vertices(graph, 1,
+                                      name = arg.node.name, 
+                                      className = "ds:Argument",
+                                      label = arg.names[i],
+                                      attr = list("prov:value" = arg.names[i]))
+                graph <- add_edges(graph, 
+                                   c(getNodeIndexbyName(graph, cmd.node.name),
+                                     getNodeIndexbyName(graph, arg.node.name)),
+                                   label = "ds:usedArgument")
+                if (length(arg.list[[i]]) > 0) {
+                    for (j in 1:length(arg.list[[i]])) {
+                        argval.node.name <- paste0("ArgumentValue.", arg.names[i], ".", j, ".", randomName())
+                        arg.val <- if (is.list(arg.list[[i]])) {
+                            arg.list[[i]][[j]]
+                        } else {
+                            arg.list[[i]][j]
+                        }
+                        if (is.function(arg.val)) {
+                            arg.val <- paste(deparse(arg.val), collapse = "")
+                            arg.val <- gsub("\"","'", arg.val)
+                        }
+                        tipo <- as.character(typeof(arg.val))
+                        arg.val <- gsub("\n", "-", arg.val)
+                        if (is.null(arg.val) | length(arg.val) == 0) arg.val <- "NULL"
+                        graph <- add_vertices(graph, 1, name = argval.node.name, 
+                                              className = "ds:ArgumentValue",
+                                              label = arg.val,
+                                              attr = list("prov:value" = arg.val,
+                                                          "ds:withDataType" = tipo))
+                        ### Revisar este nodo de donde a donde va el valor del argumento
+                        graph <- add_edges(graph,
+                                           c(getNodeIndexbyName(graph, arg.node.name),
+                                             getNodeIndexbyName(graph, argval.node.name)),
+                                           label = "ds:hadArgumentValue")
                     }
-                    if (is.function(arg.val)) {
-                        arg.val <- paste(deparse(arg.val), collapse = "")
-                        arg.val <- gsub("\"","'", arg.val)
-                    }
-                    tipo <- as.character(typeof(arg.val))
-                    arg.val <- gsub("\n", "-", arg.val)
-                    if (is.null(arg.val) | length(arg.val) == 0) arg.val <- "NULL"
+                } else {
+                    argval.node.name <- paste("ArgumentValue", arg.names[i], randomName(), sep = ".")
                     graph <- add_vertices(graph, 1, name = argval.node.name, 
                                           className = "ds:ArgumentValue",
-                                          label = arg.val,
-                                          attr = list("prov:value" = arg.val,
-                                                      "ds:withDataType" = tipo))
-                    ### Revisar este nodo de donde a donde va el valor del argumento
+                                          label = "NULL",
+                                          attr = list("prov:value" = "NULL",
+                                                      "ds:withDataType" = typeof(arg.list[[i]])))
                     graph <- add_edges(graph,
                                        c(getNodeIndexbyName(graph, arg.node.name),
                                          getNodeIndexbyName(graph, argval.node.name)),
-                                       label = "ds:hadArgumentValue")
+                                       label = "ds:hasArgumentValue")
                 }
-            } else {
-                argval.node.name <- paste("ArgumentValue", arg.names[i], randomName(), sep = ".")
-                graph <- add_vertices(graph, 1, name = argval.node.name, 
-                                      className = "ds:ArgumentValue",
-                                      label = "NULL",
-                                      attr = list("prov:value" = "NULL",
-                                                  "ds:withDataType" = typeof(arg.list[[i]])))
-                graph <- add_edges(graph,
-                                   c(getNodeIndexbyName(graph, arg.node.name),
-                                     getNodeIndexbyName(graph, argval.node.name)),
-                                   label = "ds:hasArgumentValue")
             }
         }
     }
