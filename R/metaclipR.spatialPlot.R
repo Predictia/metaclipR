@@ -112,6 +112,7 @@ metaclipR.SpatialPlot <- function(package = "visualizeR",
     }
     # Layer definition
     n.mem <- ifelse(is.null(input.grid), 1, getShape(input.grid, "member"))
+    if (is.na(n.mem)) n.mem <- 1
     classname <- ifelse(type == "grid", "go:MapRaster", "go:MapPoints")
     for (i in 1:n.mem) {
         maplayer.nodename <- paste("mapLayer", randomName(), i, sep = ".")
