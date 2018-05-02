@@ -84,6 +84,7 @@
 #'                               DataProvider = "KNMI")
 #' plot(metadata$graph)
 
+
 metaclipR.Dataset <- function(Dataset.name = NULL, 
                               Dataset.subclass = NULL,
                               DataProvider = NULL,
@@ -93,7 +94,6 @@ metaclipR.Dataset <- function(Dataset.name = NULL,
                               RCM = NULL, 
                               GCM = NULL,
                               Run = NULL) {
-    
     if (!is.character(Dataset.name) | length(Dataset.name) != 1) stop("Incorrect 'Dataset.name' argument value")
     # Load reference datasources table -------------
     ref <- showUDGDatasources()
@@ -177,7 +177,8 @@ metaclipR.Dataset <- function(Dataset.name = NULL,
     }
     # Simulation model --------------------------------------
     rcmdata <- FALSE
-    if (!is.na(RCM) & !is.null(RCM)) {
+    if (isTRUE(suppressWarnings(is.na(RCM)))) RCM <- NULL
+    if (!is.null(RCM)) {
         rcmdata <- TRUE
         isKnownRCM <- ifelse(RCM %in% knownClassIndividuals("RCM"), TRUE, FALSE)
         RCM.nodename <- ifelse(isKnownRCM, paste0("ds:", RCM), paste0("RCM.", randomName()))
@@ -192,7 +193,8 @@ metaclipR.Dataset <- function(Dataset.name = NULL,
                              getNodeIndexbyName(graph, RCM.nodename)),
                            label = "ds:hadSimulationModel")
     }
-    if (!is.na(GCM) & !is.null(GCM)) {
+    if (isTRUE(suppressWarnings(is.na(GCM)))) GCM <- NULL
+    if (!is.null(GCM)) {
         isKnownGCM <- ifelse(GCM %in% knownClassIndividuals("GCM"), TRUE, FALSE)
         GCM.nodename <- ifelse(isKnownGCM, paste0("ds:", GCM), paste0("GCM.", randomName()))
         if (rcmdata) Run <- NA
