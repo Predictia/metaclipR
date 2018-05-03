@@ -27,17 +27,6 @@
 #' @param arg.list Argument list. See details
 #' @details This function takes as reference the semantics defined in the Data Source and Transformation ontology
 #' defined in the Metaclip Framework (\url{http://metaclip.predictia.es/}).
-#' 
-#' \strong{Argument list}
-#' 
-#' The following (minimal) list of arguments is required to define an ETCCDI climate index transformation:
-#' \itemize{
-#' \item \code{index.code}
-#' }
-#' 
-#' Further optional arguments can be passed to \code{arg.list} for a more detailed description of the command call.
-#' The different arguments are explained in the the help page of \code{\link[climate4R.climdex]{climdexGrid}}. 
-#' 
 #' @references 
 #' 
 #' \href{https://github.com/Predictia/metaclip}{METACLIP Overview}
@@ -46,7 +35,7 @@
 #' 
 #' @family transformation
 #' @export
-#' @importFrom igraph make_empty_graph add_vertices add_edges 
+#' @importFrom igraph add_vertices add_edges 
 #' @author D. San Martín, J. Bedia
 
 metaclipR.Ensemble <- function(package = "transformeR",
@@ -62,15 +51,20 @@ metaclipR.Ensemble <- function(package = "transformeR",
         if (class(graph.list[[i]]$graph) != "igraph") stop("Invalid input graph (not an 'igraph-class' object)")    
     }
     # Ensemble node
-    graph <- make_empty_graph()
+    graph <- graph.list[[1]]$graph
+    # graph <- make_empty_graph()
     nodename <- paste0("Ensemble.", randomName()) 
     graph <- my_add_vertices(graph,
                              nv = 1,
                              name = nodename,
                              label = "Multi-model Ensemble",
-                             className = paste0("ds:Ensemble"))
-    for (i in 1:length(graph.list)) {
-        graph <- my_union_graph(graph.list[[i]]$graph, graph)
+                             className = "ds:Ensemble")
+    graph <- add_edges(graph,
+                       c(getNodeIndexbyName(graph, graph.list[[1]]$parentnodename),
+                         getNodeIndexbyName(graph, nodename)),
+                       label = "ds:wasEnsembleMember")
+    for (i in 2:length(graph.list)) {
+        graph <- my_union_graph(graph, graph.list[[i]]$graph)
         graph <- add_edges(graph,
                            c(getNodeIndexbyName(graph, graph.list[[i]]$parentnodename),
                              getNodeIndexbyName(graph, nodename)),
