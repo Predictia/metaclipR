@@ -16,10 +16,8 @@ my_add_vertices(graph, name = NULL, nv = 1, label = NULL,
 
 \item{label}{A \dQuote{rdfs:label} data property, useful for displaying the graph in visualization APIs}
 
-\item{className}{Character. Name of the class that the node blengs to.
+\item{className}{Character. Name of the class that the node belongs to.
 Requires prefix inclusion (e.g. \code{className = "ds:DatasetSubset"})}
-
-\item{description}{Optional. Description of the node (actually unused but for developer internal checks)}
 }
 \description{
 A wrapper of \code{igraph::add_vertex} to avoid adding vertex refering to individuals already defined in the graph

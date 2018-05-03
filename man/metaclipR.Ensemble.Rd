@@ -28,16 +28,6 @@ ds:Steps
 \details{
 This function takes as reference the semantics defined in the Data Source and Transformation ontology
 defined in the Metaclip Framework (\url{http://metaclip.predictia.es/}).
-
-\strong{Argument list}
-
-The following (minimal) list of arguments is required to define an ETCCDI climate index transformation:
-\itemize{
-\item \code{index.code}
-}
-
-Further optional arguments can be passed to \code{arg.list} for a more detailed description of the command call.
-The different arguments are explained in the the help page of \code{\link[climate4R.climdex]{climdexGrid}}.
 }
 \references{
 \href{https://github.com/Predictia/metaclip}{METACLIP Overview}

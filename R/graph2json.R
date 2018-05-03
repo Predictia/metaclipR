@@ -27,20 +27,6 @@
 #' @references A useful app to check/test JSON-LD mark <https://json-ld.org/playground/>  
 
 
-## save(full.metadata, file = "ignore/anom_metadata_struct.Rdata")
-# load("~/workspace/QA4SEAS/GITLAB/QA4Seas/wp4/metaclipR/ignore/anom_metadata_struct.Rdata", verbose = TRUE)
-# summary(full.metadata$graph)
-# graph <- full.metadata$graph
-# plot(graph, vertex.size = 5, edge.arrow.size = .1, vertex.label.cex = .75,
-#      vertex.label = V(graph)$className,
-#      edge.label.cex = .75, edge.curved = FALSE,
-#      edge.label.family = "helvetica",
-#      vertex.label.color="black")
-# output.file <- "~/workspace/QA4SEAS/GITLAB/QA4Seas/wp4/metaclipR/ignore/ex.json"
-# graph2json(graph, output.file)
-# graph <- md$graph
-
-
 graph2json <- function(graph, output.file) {
     if (!is_igraph(graph)) stop("'graph' is not an igraph-class object")
     message("[", Sys.time(), "] Writing file...")    
@@ -93,7 +79,7 @@ graph2json <- function(graph, output.file) {
     for (i in 1:length(vertices)) {
         vid <- vertex_attr(g, name = "name", index = vertices[i])
         if (!vid %in% describedNodeNames) {
-            if (!firstParentNode ) {
+            if (!firstParentNode) {
                 cat("\n,", file = z)
             }
             cat("{", file = z)
@@ -203,5 +189,5 @@ serializeVertex <- function(g, vertex, describedNodeNames, connection) {
 #' @keywords internal
 #' @author J Bedia
 
-isIndividualInstance <- function(node.name) grepl("^ds:|^veri:|^go:|^cal:", node.name)
+isIndividualInstance <- function(node.name) grepl("^ds\\:|^veri\\:|^go\\:|^cal\\:", node.name)
 

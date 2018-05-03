@@ -107,9 +107,8 @@ knownClassIndividuals <- function(classname, vocabulary = "datasource") {
 #' @param name vertex name
 #' @param nv Integer. Number of vertices added. Default (and only sensible value) to 1.
 #' @param label A \dQuote{rdfs:label} data property, useful for displaying the graph in visualization APIs
-#' @param className Character. Name of the class that the node blengs to.
+#' @param className Character. Name of the class that the node belongs to.
 #'  Requires prefix inclusion (e.g. \code{className = "ds:DatasetSubset"})
-#' @param description Optional. Description of the node (actually unused but for developer internal checks)
 #' @importFrom igraph add_vertices vertex_attr
 #' @keywords internal
 #' @author J Bedia
