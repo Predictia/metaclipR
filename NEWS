@@ -1,7 +1,35 @@
 # NEWS
 
-* Added ETCCDI ClimateIndex definition
+## v0.0.0 (Jul 2017)
+
+* First package version
+
+## v0.0.1 (Jul 2017)
+
+* Add serialization to JSON-LD (`graph2json`)
+
+## v0.1.0 (17 Dec 2017)
+
+* Version used in QA4Seas Deliverable 4.1
+* Add ad-hoc functions for D4.1:
+   - anomaly map (`metaclip.graph.AnomalyMap`)
+   - skill map (`metaclip.graph.SkillMap`)
+   - ENSO plume (`metaclip.graph.EnsoPlume`) 
+* Add compression and serialization (`embedFig`)
+
+## v1.0.0 (in devel)
+
+* Renamed all exported functions: metaclip.graph* --> metaclipR.*
+* New ETCCDI Climate Index definition (`metaclipR.etccdi`)
 * New `metaclipR.Ensemble` for multimodel ensemble representations
 * New `metaclipR.Validation`, for characterizing validation steps
+* New `metcalipR.loadeR`, to describe ds:DatasetSubset entities generated with the climate4R loading functions
+* New `metcalipR.BiasCorrection`, to describe bias correction
 * Allow multi-layer plot representation in `metaclipR.spatialPlot` when multiple members exist
+* Automatic connection to remote ontology files on package start (`.onAttach`)
+* New internal functions:
+   - For attribute-preserving graph unions (`my_union`, `my_union_graph`)
+   - For automated package version checks via internal lookup table (`pkgVersionCheck` internal)
+   - For identifying individual instances of specific METACLIP vocabularies (`isIndividualInstance`)
+   - Internal adapation of `graph2json` to incorporate references to individuals
 * Other changes and class/property renaming for full compatibility with [datasource.owl v0.3](http://metaclip.predictia.es/datasource/0.3/datasource.owl)
