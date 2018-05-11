@@ -6,7 +6,8 @@
 \usage{
 metaclipR.SpatialPlot(package = "visualizeR", version = "1.1.1", graph,
   input.grid = NULL, type = "grid", fun = "spatialPlot",
-  arg.list = NULL, stipplingInputGraph = NULL, epsg.code = "EPSG:4329")
+  arg.list = NULL, stipplingInputGraph = NULL, epsg.code = "EPSG:4329",
+  isBranchStep = FALSE)
 }
 \arguments{
 \item{package}{package}
@@ -29,6 +30,10 @@ for station datasets. Whie the first is mapped to the go:MapRaster class, the la
 and no stippling is indicated)}
 
 \item{epsg.code}{A character string indicating the EPSG code of the map projection. Default to \code{"4979"}}
+
+\item{isBranchStep}{Logical flag. For internal usage only, and rarely needed. It indicates wheter the GraphicalOutput is the
+new terminal node of the graph representation (\code{FALSE} the default), or it is is a secondary branch, and the last terminal node
+should be preserved as the link for the next step.}
 }
 \description{
 Build a directed metadata graph describing a spatialPlot in visualizeR
