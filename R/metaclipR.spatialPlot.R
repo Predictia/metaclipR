@@ -30,6 +30,9 @@
 #' @param arg.list Argument list (A named list in key-value format).
 #' @param stipplingInputGraph Currently unused. The graph containing the step from which the stippling is derived (default to \code{NULL},
 #'  and no stippling is indicated)
+#' @param isBranchStep Logical flag. For internal usage only, and rarely needed. It indicates wheter the GraphicalOutput is the
+#'  new terminal node of the graph representation (\code{FALSE} the default), or it is is a secondary branch, and the last terminal node
+#'  should be preserved as the link for the next step.
 #' @details 
 #' 
 #' It is important to note that the resulting output of this function will reatin as parent node the last step before plotting,
@@ -55,9 +58,11 @@ metaclipR.SpatialPlot <- function(package = "visualizeR",
                                   fun = "spatialPlot",
                                   arg.list = NULL,
                                   stipplingInputGraph = NULL,
-                                  epsg.code = "EPSG:4329") {
+                                  epsg.code = "EPSG:4329",
+                                  isBranchStep = FALSE) {
     if (class(graph$graph) != "igraph") stop("Invalid input graph (not an 'igraph-class' object)")
     type <- match.arg(type, c("grid", "stations"))
+    stopifnot(is.logical(isBranchStep))
     withInput <- graph$parentnodename
     graph <- graph$graph
     map.nodename <- paste("Map", randomName(), sep = ".")
@@ -218,5 +223,6 @@ metaclipR.SpatialPlot <- function(package = "visualizeR",
     if (!is.null(arg.list$title)) arg.list$title <- gsub("\n","|", arg.list$title)
     if (!is.null(arg.list$main)) arg.list$main <- gsub("\n","|", arg.list$main)
     graph <- metaclip.graph.Command(graph, package, version, fun, arg.list, origin.node.name = map.nodename)
-    return(list("graph" = graph, "parentnodename" = withInput))
+    parentnodename <- ifelse(isBranchStep, withInput, map.nodename)
+    return(list("graph" = graph, "parentnodename" = parentnodename))
 }
