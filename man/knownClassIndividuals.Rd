@@ -19,8 +19,8 @@ A character vector of individuals for that class
 List defined individuals pertaining to a specific class from a METACLIP vocabulary
 }
 \details{
-The function will check the existing individuals in the latest stable datasource 
-ontology release, available in \url{http://metaclip.predictia.es/datasource/datasource.owl}
+The function will check the existing individuals in the latest stable target
+ontology release
 }
 \note{
 The function won't work if there is no internet connection, or any other connection problem prevents
@@ -33,6 +33,9 @@ knownClassIndividuals("ETCCDI")
 # an empty vector is returned, with a warning:
 knownClassIndividuals("ETCDDI")
 knownClassIndividuals("Dataset")
+}
+\seealso{
+Other ontology.helpers: \code{\link{getIndividualClass}}
 }
 \author{
 J Bedia, D. San-Martín
