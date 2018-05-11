@@ -70,24 +70,24 @@ metaclipR.BiasCorrection <- function(package = "downscaleR",
     if (class(TrainingGraph$graph) != "igraph") stop("Invalid input TrainingGraph (not an 'igraph-class' object)")
     if (class(ReferenceGraph$graph) != "igraph") stop("Invalid input ReferenceGraph (not an 'igraph-class' object)")
     pkgVersionCheck(package, version)
-    CalibrationMethodClass <- match.arg(CalibrationMethodClass, choices = c("BiasCorrection",
-                                                                            "NonParametricBiasCorrection",
-                                                                            "LinearScaling",
-                                                                            "NPQuantileMapping",
-                                                                            "PQuantileMapping",
-                                                                            "ParametricBiasCorrection"))
+    BC.class <- match.arg(BC.class, choices = c("BiasCorrection",
+                                                "NonParametricBiasCorrection",
+                                                "LinearScaling",
+                                                "NPQuantileMapping",
+                                                "PQuantileMapping",
+                                                "ParametricBiasCorrection"))
     if (!is.null(hasProbCharacter)) {
         hasProbCharacter <- match.arg(hasProbCharacter, choices = c("deterministic", "stochastic"))
     }
-    graph <- graph$graph
     pnode <- graph$parentnodename
+    graph <- graph$graph
     # Adding the Calibration node
     cal.node <- paste0("Calibration.", randomName())
     graph <- my_add_vertices(graph,
                              nv = 1,
                              name = cal.node,
                              label = "BiasCorrection",
-                             className = "cal:BiasCorrection")
+                             className = "cal:Calibration")
     graph <- add_edges(graph, 
                        c(getNodeIndexbyName(graph, pnode),
                          getNodeIndexbyName(graph, cal.node)),
@@ -95,14 +95,15 @@ metaclipR.BiasCorrection <- function(package = "downscaleR",
     # Adding the CalibrationMethod node
     isKnownBCmethod <- ifelse(BC.method %in% knownClassIndividuals("BiasCorrection", vocabulary = "calibration"), TRUE, FALSE)
     method.nodename <- ifelse(isKnownBCmethod, paste0("cal:", BC.method), paste0("BCmethod.", randomName())) 
-    attrl <- if (!isKnownBCmethod) {
-        list("cal:isMultiVariable" = isMultivariable,
-             "cal:isMultiSite" = isMultisite,
-             "cal:hasProbCharacter" = hasProbCharacter,
-             "rdfs:isDefinedBy" = isDefinedBy,
-             "rdfs:comment" = comment)
+    if (!isKnownBCmethod) {
+        attrl <- list("cal:isMultiVariable" = isMultivariable,
+                      "cal:isMultiSite" = isMultisite,
+                      "cal:hasProbCharacter" = hasProbCharacter,
+                      "rdfs:isDefinedBy" = isDefinedBy,
+                      "rdfs:comment" = comment)
     } else {
-        NULL    
+        attrl <- NULL    
+        BC.class <- getIndividualClass(BC.method, vocabulary = "calibration")
     }
     graph <- my_add_vertices(graph,
                              nv = 1,

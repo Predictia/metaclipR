@@ -57,13 +57,14 @@ showUDGDatasources <- function() {
 #'  \code{"calibration"}, \code{"verification"} and \code{"graphical_output"}.
 #' @importFrom utils URLencode
 #' @importFrom magrittr %>% 
-#' @details The function will check the existing individuals in the latest stable datasource 
-#' ontology release, available in \url{http://metaclip.predictia.es/datasource/datasource.owl}
+#' @details The function will check the existing individuals in the latest stable target
+#' ontology release
 #' @return A character vector of individuals for that class
 #' @note The function won't work if there is no internet connection, or any other connection problem prevents
 #'  read access to the ontology file.
 #' @export
 #' @author J Bedia, D. San-Martín
+#' @family ontology.helpers
 #' @examples 
 #' knownClassIndividuals("ModellingCenter")
 #' knownClassIndividuals("ETCCDI")
@@ -99,6 +100,53 @@ knownClassIndividuals <- function(classname, vocabulary = "datasource") {
         message("Unreachable remote vocabulary\nLikely reason: unavailable internet connection")
     }
 }
+
+
+#' @title Identify the class belonging of an individual
+#' @description Identifies the class belonging of an individual. Superclasses are ignored
+#' @param individual.name Name of the individual
+#' @param vocabulary The target vocabulary name. Possible values are \code{"datasource"} (the default),
+#'  \code{"calibration"}, \code{"verification"} and \code{"graphical_output"}.
+#' @importFrom utils URLencode
+#' @importFrom magrittr %>% extract2
+#' @details The function will check the existing individuals in the latest stable target 
+#' ontology release
+#' @return A character string with the most direct class belonging (other superclasses are ignored)
+#' @note The function won't work if there is no internet connection, or any other connection problem prevents
+#'  read access to the ontology file.
+#' @export
+#' @author J Bedia, D. San-Martín
+#' @family ontology.helpers
+
+getIndividualClass <- function(individual.name, vocabulary = "datasource") {
+    vocabulary <- match.arg(vocabulary, choices = c("datasource",
+                                                    "calibration",
+                                                    "verification",
+                                                    "graphical_output"))
+    voc <- switch(vocabulary,
+                  "datasource" = "datasource/datasource.owl",
+                  "calibration" = "calibration/calibration.owl",
+                  "verification" = "verification/verification.owl",
+                  "graphical_output" = "graphical_output/graphical_output.owl"
+    )
+    refURL <- paste0("http://metaclip-interpreter.predictia.es/individual?vocab=http://metaclip.predictia.es/", voc, "&id=")
+    message("Reading remote ", vocabulary, " ontology file ...")
+    destURL <- paste0(refURL, individual.name) %>% URLencode() %>% url() 
+    on.exit(close(destURL))
+    out <- tryCatch(suppressWarnings(readLines(destURL, warn = FALSE)), error = function(er) {
+        er <- NULL
+        return(er)
+    })
+    if (!is.null(out)) {
+        a <- gsub("\"|\\[|]", "", out) %>% strsplit(split = ",") %>% unlist() %>% extract2(1) %>% gsub(pattern = "http://metaclip.predictia.es/calibration/calibration.owl#", 
+                                                                                                       replacement = "")
+        if (length(a) == 0) warning("No class found:\nEither the individual does not exist or there are no associated classes to it")
+        return(a)
+    } else {
+        message("Unreachable remote vocabulary\nLikely reason: unavailable internet connection")
+    }
+}
+
 
 
 #' @title Internal helper for vertex addition
