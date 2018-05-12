@@ -138,8 +138,7 @@ getIndividualClass <- function(individual.name, vocabulary = "datasource") {
         return(er)
     })
     if (!is.null(out)) {
-        a <- gsub("\"|\\[|]", "", out) %>% strsplit(split = ",") %>% unlist() %>% extract2(1) %>% gsub(pattern = "http://metaclip.predictia.es/calibration/calibration.owl#", 
-                                                                                                       replacement = "")
+        a <- gsub("\"|\\[|]", "", out) %>% strsplit(split = ",") %>% unlist() %>% extract2(1) %>% gsub(pattern = "http://metaclip.predictia.es/.*\\.owl#", replacement = "")
         if (length(a) == 0) warning("No class found:\nEither the individual does not exist or there are no associated classes to it")
         return(a)
     } else {
