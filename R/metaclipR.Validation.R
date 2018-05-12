@@ -68,6 +68,17 @@ metaclipR.Validation <- function(package,
                        c(getNodeIndexbyName(graph, origin.node.name),
                          getNodeIndexbyName(graph, refnode)),
                        label = "veri:withReference")
+    # Linking with QualityAspect
+    qnode.name <- paste0("QualityAspect.", randomName())
+    graph <- add_vertices(graph,
+                          nv = 1,
+                          name = qnode.name,
+                          label = QualityAspect,
+                          className = paste0("veri:", QualityAspect))
+    graph <- add_edges(graph, 
+                       c(getNodeIndexbyName(graph, origin.node.name),
+                         getNodeIndexbyName(graph, qnode.name)),
+                       label = "veri:withQualityAspect")
     # Function call 
     if ("grid" %in% names(arg.list)) arg.list <- arg.list[-grep("grid", names(arg.list))]
     graph <- metaclip.graph.Command(graph,
