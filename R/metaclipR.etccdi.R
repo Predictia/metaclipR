@@ -90,18 +90,35 @@ metaclipR.etccdi <- function(graph,
     }
     orig.node <- graph$parentnodename
     graph <- graph$graph
+    cicalc.node <- paste("ClimateIndexCalculation", randomName(), sep = ".")
+    # ClimateIndex calculation node
+    graph <- my_add_vertices(graph,
+                             nv = 1,
+                             name = cicalc.node,
+                             label = "ClimateIndexCalculation",
+                             className = "ds:ClimateIndexCalculation")
+    graph <- add_edges(graph,
+                       c(getNodeIndexbyName(graph, orig.node),
+                         getNodeIndexbyName(graph, cicalc.node)),
+                       label = "ds:hadClimateIndexCalculation")
     # Climate index node
     isKnownIndex <- ifelse(arg.list$index.code %in% suppressMessages(knownClassIndividuals("ETCCDI")), TRUE, FALSE)
-    nodename <- ifelse(isKnownIndex, paste0("ds:", arg.list$index.code), paste0("CimateIndex.", randomName())) 
+    if (isKnownIndex) {
+        nodename <- paste0("ds:", arg.list$index.code)
+        cn <- "ds:ETCCDI"
+    } else {
+        nodename <- paste0("CimateIndex.", randomName())
+        cn <- "ds:ClimateIndex"
+    }
     graph <- my_add_vertices(graph,
                              nv = 1,
                              name = nodename,
                              label = paste("ClimateIndex", arg.list$index.code, sep = "."),
-                             className = paste0("ds:ETCCDI"))
+                             className = cn)
     graph <- add_edges(graph,
-                       c(getNodeIndexbyName(graph, orig.node),
+                       c(getNodeIndexbyName(graph, cicalc.node),
                          getNodeIndexbyName(graph, nodename)),
-                       label = "ds:hadClimateIndexCalculation")
+                       label = "ds:withClimateIndex")
     # TemporalResolution ---------------------
     # hasTimeStep
     if (!is.null(output)) {
@@ -119,7 +136,7 @@ metaclipR.etccdi <- function(graph,
                               attr = list("ds:hasTimeStep" = time.step,
                                           "ds:hasCellMethod" = cell.method))
         graph <- add_edges(graph, 
-                           c(getNodeIndexbyName(graph, nodename),
+                           c(getNodeIndexbyName(graph, cicalc.node),
                              getNodeIndexbyName(graph, timeres.nodename)),
                            label = "ds:hasTemporalResolution")
     }
@@ -128,6 +145,6 @@ metaclipR.etccdi <- function(graph,
     if ("tx" %in% names(arg.list)) arg.list <- arg.list[-grep("tx", names(arg.list))]
     if ("pr" %in% names(arg.list)) arg.list <- arg.list[-grep("pr", names(arg.list))]
     graph <- metaclip.graph.Command(graph, package, version, fun, arg.list,
-                                    origin.node.name = nodename)
-    return(list("graph" = graph, "parentnodename" = nodename))
+                                    origin.node.name = cicalc.node)
+    return(list("graph" = graph, "parentnodename" = cicalc.node))
 }
