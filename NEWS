@@ -4,7 +4,7 @@
 
 * First package version
 
-## v0.0.1 (Jul 2017)
+## v0.0.1 (Sep 2017)
 
 * Add serialization to JSON-LD (`graph2json`)
 
