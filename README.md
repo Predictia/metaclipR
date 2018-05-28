@@ -1,2 +1,2 @@
 # metaclipR
-The climate4R extension for the METACLIP Provenance Framework
+Moved to [https://github.com/metaclip/metaclipR](https://github.com/metaclip/metaclipR).
